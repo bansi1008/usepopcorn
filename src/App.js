@@ -51,46 +51,61 @@ const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
 const KEY = "5c42680d";
-const query = "star wars";
 
 export default function App() {
-  const [movies, setMovies] = useState(tempMovieData);
+  const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState(tempWatchedData);
   const [isloaded, setIsLoaded] = useState(false);
   const [err, setErr] = useState("");
+  const [query, setQuery] = useState("");
 
-  useEffect(function () {
-    async function fetchMovies() {
-      try {
-        setIsLoaded(true);
-        const res = await fetch(
-          `https://www.omdbapi.com/?i=tt3896198&apikey=${KEY}&s=${query}`
-        );
+  useEffect(
+    function () {
+      setErr("");
+      setMovies([]);
 
-        if (!res.ok) throw new Error("Network response was not ok");
+      async function fetchMovies() {
+        try {
+          setIsLoaded(true);
+          const res = await fetch(
+            `https://www.omdbapi.com/?i=tt3896198&apikey=${KEY}&s=${query}`
+          );
 
-        const data = await res.json();
-        setMovies(data.Search);
-      } catch (err) {
-        setErr(err.message);
-      } finally {
-        setIsLoaded(false);
+          if (!res.ok) throw new Error("Network response was not ok");
+
+          const data = await res.json();
+          if (data.Response === "False") throw new Error("movies not found");
+
+          setMovies(data.Search);
+        } catch (err) {
+          console.error(err);
+          setErr(err.message);
+        } finally {
+          setIsLoaded(false);
+        }
       }
-    }
 
-    fetchMovies();
-  }, []);
+      if (query.length < 3) {
+        setMovies([]);
+        setErr("");
+        return;
+      }
+
+      fetchMovies();
+    },
+    [query]
+  );
 
   return (
     <>
       <NavBar>
-        <Search />
+        <Search query={query} setQuery={setQuery} />
         <NumResults movies={movies} />
       </NavBar>
 
       <Main>
         <Box>
-          {err && <Error error={err} />}
+          {err && <Error message="No movies found" />}
           {!isloaded && !err && <MovieList movies={movies} />}
           {isloaded && <Loader />}
         </Box>
@@ -104,10 +119,10 @@ export default function App() {
   );
 }
 
-function Error({ error }) {
+function Error({ message }) {
   return (
     <div className="error">
-      <p>Something went wrong: {error.message}</p>
+      <p>{message}</p>
     </div>
   );
 }
@@ -138,8 +153,7 @@ function Logo() {
   );
 }
 
-function Search() {
-  const [query, setQuery] = useState("");
+function Search({ query, setQuery }) {
   return (
     <input
       className="search"
