@@ -105,7 +105,7 @@ export default function App() {
 
       <Main>
         <Box>
-          {err && <Error message="No movies found" />}
+          {err && <Error message={err} />}
           {!isloaded && !err && <MovieList movies={movies} />}
           {isloaded && <Loader />}
         </Box>
