@@ -186,6 +186,21 @@ function Box({ children }) {
 }
 
 function SelectedMovie({ selectId, onClose }) {
+  const [movie, setMovie] = useState({});
+  const {
+    Title: title,
+    Year: year,
+    Poster: poster,
+    Runtime: runtime,
+    imdbRating,
+    Plot: plot,
+    Released: released,
+    Actors: actors,
+    Director: director,
+    Genre: genre,
+  } = movie;
+
+  console.log(title, year);
   useEffect(
     function () {
       async function fetchMoviesdetails() {
@@ -193,7 +208,7 @@ function SelectedMovie({ selectId, onClose }) {
           `https://www.omdbapi.com/?apikey=${KEY}&i=${selectId}`
         );
         const data = await res.json();
-        console.log(data);
+        setMovie(data);
       }
       fetchMoviesdetails();
     },
@@ -202,10 +217,41 @@ function SelectedMovie({ selectId, onClose }) {
 
   return (
     <div className="details">
-      <button className="btn-back" onClick={onClose}>
-        &larr;
-      </button>
-      {selectId}
+      <header>
+        <button className="btn-back" onClick={onClose}>
+          &larr;
+        </button>
+        <img src={poster} alt={`${title} poster`} />
+        <div className="details-overview">
+          <h2>{title}</h2>
+          <p>
+            <span>⭐️</span>
+            <span>{imdbRating}</span>
+          </p>
+          <p>
+            <span>🗓</span>
+            <span>{released}</span>
+          </p>
+          <p>
+            <span>⏳</span>
+            <span>{runtime}</span>
+          </p>
+          <p>
+            <span>🎭</span>
+            <span>{actors}</span>
+          </p>
+          <p>
+            <span>🎬</span>
+            <span>{director}</span>
+          </p>
+          <p>
+            <span>📖</span>
+            <span>{genre}</span>
+          </p>
+
+          <p className="plot">{plot}</p>
+        </div>
+      </header>
     </div>
   );
 }
