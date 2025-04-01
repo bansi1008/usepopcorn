@@ -236,22 +236,20 @@ function SelectedMovie({ selectId, onClose }) {
             <span>⏳</span>
             <span>{runtime}</span>
           </p>
-          <p>
-            <span>🎭</span>
-            <span>{actors}</span>
-          </p>
-          <p>
-            <span>🎬</span>
-            <span>{director}</span>
-          </p>
+
           <p>
             <span>📖</span>
             <span>{genre}</span>
           </p>
-
-          <p className="plot">{plot}</p>
         </div>
       </header>
+      <section>
+        <p>
+          <em>{plot}</em>
+        </p>
+        <p>Starring {actors}</p>
+        <p>Directed by {director}</p>
+      </section>
     </div>
   );
 }
