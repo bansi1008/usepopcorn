@@ -188,6 +188,7 @@ function Box({ children }) {
 
 function SelectedMovie({ selectId, onClose }) {
   const [movie, setMovie] = useState({});
+  const [isLoaded, setIsLoaded] = useState(false);
   const {
     Title: title,
     Year: year,
@@ -205,11 +206,13 @@ function SelectedMovie({ selectId, onClose }) {
   useEffect(
     function () {
       async function fetchMoviesdetails() {
+        setIsLoaded(true);
         const res = await fetch(
           `https://www.omdbapi.com/?apikey=${KEY}&i=${selectId}`
         );
         const data = await res.json();
         setMovie(data);
+        setIsLoaded(false);
       }
       fetchMoviesdetails();
     },
@@ -218,42 +221,48 @@ function SelectedMovie({ selectId, onClose }) {
 
   return (
     <div className="details">
-      <header>
-        <button className="btn-back" onClick={onClose}>
-          &larr;
-        </button>
-        <img src={poster} alt={`${title} poster`} />
-        <div className="details-overview">
-          <h2>{title}</h2>
-          <p>
-            <span>⭐️</span>
-            <span>{imdbRating}</span>
-          </p>
-          <p>
-            <span>🗓</span>
-            <span>{released}</span>
-          </p>
-          <p>
-            <span>⏳</span>
-            <span>{runtime}</span>
-          </p>
+      {isLoaded ? (
+        <Loader />
+      ) : (
+        <>
+          <header>
+            <button className="btn-back" onClick={onClose}>
+              &larr;
+            </button>
+            <img src={poster} alt={`${title} poster`} />
+            <div className="details-overview">
+              <h2>{title}</h2>
+              <p>
+                <span>⭐️</span>
+                <span>{imdbRating}</span>
+              </p>
+              <p>
+                <span>🗓</span>
+                <span>{released}</span>
+              </p>
+              <p>
+                <span>⏳</span>
+                <span>{runtime}</span>
+              </p>
 
-          <p>
-            <span>📖</span>
-            <span>{genre}</span>
-          </p>
-        </div>
-      </header>
-      <section>
-        <div className="rating">
-          <StarRating maxRating={10} size={24} />
-        </div>
-        <p>
-          <em>{plot}</em>
-        </p>
-        <p>Starring {actors}</p>
-        <p>Directed by {director}</p>
-      </section>
+              <p>
+                <span>📖</span>
+                <span>{genre}</span>
+              </p>
+            </div>
+          </header>
+          <section>
+            <div className="rating">
+              <StarRating maxRating={10} size={24} />
+            </div>
+            <p>
+              <em>{plot}</em>
+            </p>
+            <p>Starring {actors}</p>
+            <p>Directed by {director}</p>
+          </section>
+        </>
+      )}
     </div>
   );
 }
