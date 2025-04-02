@@ -162,21 +162,24 @@ function NavBar({ children }) {
 function Logo() {
   return (
     <div className="logo">
-      <span role="img">🍿</span>
-      <h1>usePopcorn</h1>
+      <span role="img">🎥</span>
+      <h1>Movie Search</h1>
     </div>
   );
 }
 
 function Search({ query, setQuery }) {
   return (
-    <input
-      className="search"
-      type="text"
-      placeholder="Search movies..."
-      value={query}
-      onChange={(e) => setQuery(e.target.value)}
-    />
+    <div>
+      <span className="searchemoji">🔍</span>
+      <input
+        className="search"
+        type="text"
+        placeholder="Search movies...(Please type atleast 3 characters)"
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+      />
+    </div>
   );
 }
 
