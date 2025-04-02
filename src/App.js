@@ -74,9 +74,12 @@ export default function App() {
           }
 
           setMovies(data.Search);
+          setErr("");
         } catch (err) {
           console.error(err);
-          setErr(err.message);
+          if (err.name !== "AbortError") {
+            setErr(err.message);
+          }
         } finally {
           setIsLoaded(false);
         }
