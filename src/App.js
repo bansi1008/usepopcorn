@@ -52,6 +52,24 @@ export default function App() {
   function handleDeleteWatched(id) {
     setWatched((watched) => watched.filter((movie) => movie.imdbID !== id));
   }
+
+  useEffect(
+    function () {
+      const handleKeyDown = (e) => {
+        if (e.code === "Escape") {
+          handleCloseDetails();
+          console.log("Enter key pressed");
+        }
+      };
+
+      document.addEventListener("keydown", handleKeyDown);
+      return () => {
+        document.removeEventListener("keydown", handleKeyDown);
+      };
+    },
+    [handleCloseDetails]
+  );
+
   useEffect(
     function () {
       setMovies([]);
