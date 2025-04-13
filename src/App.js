@@ -1,5 +1,6 @@
 import { use, useEffect, useState } from "react";
 import StarRating from "./StarRating";
+import { Analytics } from "@vercel/analytics/react";
 
 const tempWatchedData = [
   {
@@ -151,6 +152,7 @@ export default function App() {
           )}
         </Box>
       </Main>
+      <Analytics />
     </>
   );
 }
